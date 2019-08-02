@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:EveWindowManager"
         xmlns:p="clr-namespace:EveWindowManager.Properties"
         mc:Ignorable="d"
-        Title="evm v0.0.2 - Eve Window Manager"
+        Title="ewm v0.0.2 - Eve Window Manager"
         Left="{Binding Source={x:Static p:Settings.Default}, Path=Left, Mode=TwoWay}"
         Top="{Binding Source={x:Static p:Settings.Default}, Path=Top, Mode=TwoWay}"
         Width="{Binding Source={x:Static p:Settings.Default}, Path=Width, Mode=TwoWay}"
@@ -20,6 +20,9 @@
                 <MenuItem Header="_Save settings to file" Click="SaveSettingsToFileClick" />
                 <Separator />
                 <MenuItem Header="_Exit" Click="ExitClick" />
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="_About" Click="AboutClick" />
             </MenuItem>
         </Menu>
         <Grid DockPanel.Dock="Top">

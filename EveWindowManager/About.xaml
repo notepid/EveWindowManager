@@ -1,0 +1,16 @@
+﻿<Window x:Class="EveWindowManager.About"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EveWindowManager"
+        mc:Ignorable="d"
+        Title="About" Height="95.33" Width="267.306" WindowStyle="ToolWindow" ShowInTaskbar="False" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
+    <Grid>
+        <TextBlock HorizontalAlignment="Center" TextAlignment="Center">
+            <Bold>Eve Window Manager</Bold><LineBreak />
+            <LineBreak />
+            You can find the project page on <Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="https://github.com/notepid/EveWindowManager">GitHub</Hyperlink>
+        </TextBlock>
+    </Grid>
+</Window>

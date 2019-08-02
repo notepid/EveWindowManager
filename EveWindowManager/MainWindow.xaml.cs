@@ -122,5 +122,10 @@ namespace EveWindowManager
         {
             Properties.Settings.Default.Save();
         }
+
+        private void AboutClick(object sender, RoutedEventArgs e)
+        {
+            new About().Show();
+        }
     }
 }
