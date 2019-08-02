@@ -35,6 +35,11 @@ namespace EveWindowManager.Store
             return _eveClientSettings.FirstOrDefault(x => x.ProcessTitle.Equals(windowTitle));
         }
 
+        public bool IsSaved(string windowTitle)
+        {
+            return (GetSettingByWindowTitle(windowTitle) != null);
+        }
+
         public void Upsert(EveClientSetting clientSetting)
         {
             //Update existing
@@ -53,6 +58,16 @@ namespace EveWindowManager.Store
             {
                 _eveClientSettings.Add(clientSetting);
             }
+        }
+
+        public void DeleteByWindowTitle(string windowTitle)
+        {
+            _eveClientSettings.RemoveAll(x => x.ProcessTitle.Equals(windowTitle));
+        }
+
+        public void Delete(EveClientSetting clientSetting)
+        {
+            _eveClientSettings.Remove(clientSetting);
         }
     }
 }

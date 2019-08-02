@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 using EveWindowManager.Extensions;
+using EveWindowManager.Models;
 using EveWindowManager.Store;
 using EveWindowManager.Windows;
 
@@ -30,12 +31,14 @@ namespace EveWindowManager
         {
             var processes = Process.GetProcessesByName("exefile");
 
-            var items = new List<Process>();
+            var items = new List<ProcessListItem>();
 
             foreach (var process in processes)
             {
                 if (!process.MainWindowTitle.StartsWith("EVE - ")) continue;
-                items.Add(process);
+
+                var isSaved = _clientSettingsStore.IsSaved(process.MainWindowTitle); ;
+                items.Add(new ProcessListItem { Process = process, IsSaved = isSaved });
             }
 
             icEveClients.ItemsSource = items;
@@ -60,19 +63,33 @@ namespace EveWindowManager
 
         private void ItemButtonRestoreClick(object sender, RoutedEventArgs e)
         {
-            var process = ((FrameworkElement)sender).DataContext as Process;
+            var icItem = ((FrameworkElement)sender).DataContext as ProcessListItem;
 
-            RestoreClientPosition(process);
+            RestoreClientPosition(icItem.Process);
 
-            UpdateStatus($"Client {process.MainWindowTitle} restored.");
+            UpdateStatus($"Client {icItem.Process.MainWindowTitle} restored.");
         }
 
         private void ItemButtonSaveClick(object sender, RoutedEventArgs e)
         {
-            var process = ((FrameworkElement)sender).DataContext as Process;
-            _clientSettingsStore.Upsert(process.ToEveClientSetting());
+            var icItem = ((FrameworkElement)sender).DataContext as ProcessListItem;
+            _clientSettingsStore.Upsert(icItem.Process.ToEveClientSetting());
             _clientSettingsStore.SaveToFile();
-            UpdateStatus($"Client {process.MainWindowTitle} saved.");
+            
+            icItem.IsSaved = _clientSettingsStore.IsSaved(icItem.Process.MainWindowTitle);
+            icEveClients.Items.Refresh();
+            UpdateStatus($"Client {icItem.Process.MainWindowTitle} saved.");
+        }
+
+        private void ItemButtonDeleteClick(object sender, RoutedEventArgs e)
+        {
+            var icItem = ((FrameworkElement)sender).DataContext as ProcessListItem;
+            _clientSettingsStore.DeleteByWindowTitle(icItem.Process.MainWindowTitle);
+            _clientSettingsStore.SaveToFile();
+
+            icItem.IsSaved = _clientSettingsStore.IsSaved(icItem.Process.MainWindowTitle);
+            icEveClients.Items.Refresh();
+            UpdateStatus($"Settings for client {icItem.Process.MainWindowTitle} deleted.");
         }
 
         #endregion
@@ -86,20 +103,22 @@ namespace EveWindowManager
         
         private void Button_RestoreAll(object sender, RoutedEventArgs e)
         {
-            foreach (Process process in icEveClients.Items)
+            foreach (ProcessListItem icItem in icEveClients.Items)
             {
-                RestoreClientPosition(process);
+                RestoreClientPosition(icItem.Process);
             }
             UpdateStatus("All clients restored.");
         }
 
         private void Button_SaveAll(object sender, RoutedEventArgs e)
         {
-            foreach (Process process in icEveClients.Items)
+            foreach (ProcessListItem icItem in icEveClients.Items)
             {
-                _clientSettingsStore.Upsert(process.ToEveClientSetting());
+                _clientSettingsStore.Upsert(icItem.Process.ToEveClientSetting());
+                icItem.IsSaved = _clientSettingsStore.IsSaved(icItem.Process.MainWindowTitle);
             }
             _clientSettingsStore.SaveToFile();
+            icEveClients.Items.Refresh();
             UpdateStatus("All clients saved.");
         }
 

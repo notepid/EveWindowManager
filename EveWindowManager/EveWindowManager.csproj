@@ -81,6 +81,7 @@
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
     <Compile Include="Extensions\EveClientSettingsExtensions.cs" />
+    <Compile Include="Models\ProcessListItem.cs" />
     <Compile Include="Store\EveClientSetting.cs" />
     <Compile Include="Store\EveClientSettingsStore.cs" />
     <Compile Include="Windows\WindowHelper.cs" />
@@ -142,6 +143,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="browser.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\icons8-checkmark-48.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
