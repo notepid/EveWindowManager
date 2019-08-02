@@ -13,7 +13,7 @@ namespace EveWindowManager
     /// </summary>
     public partial class MainWindow : Window
     {
-        private EveClientSettingsStore _clientSettingsStore = new EveClientSettingsStore();
+        private readonly EveClientSettingsStore _clientSettingsStore = new EveClientSettingsStore();
 
         public MainWindow()
         {
@@ -24,13 +24,6 @@ namespace EveWindowManager
         private void UpdateStatus(string message)
         {
             lbStatus.Content = message;
-        }
-
-        /* Refresh client list */
-
-        private void RefreshButtonClick(object sender, RoutedEventArgs e)
-        {
-            RefreshClients();
         }
 
         private void RefreshClients()
@@ -50,17 +43,6 @@ namespace EveWindowManager
             UpdateStatus("Clients refreshed.");
         }
 
-        /* Restore client positions */
-
-        private void RestoreAllButtonClick(object sender, RoutedEventArgs e)
-        {
-            foreach (Process process in icEveClients.Items)
-            {
-                RestoreClientPosition(process);
-            }
-            UpdateStatus("All clients restored.");
-        }
-
         private void RestoreClientPosition(Process process)
         {
             var settings = _clientSettingsStore.GetSettingByWindowTitle(process.MainWindowTitle);
@@ -71,6 +53,8 @@ namespace EveWindowManager
                 MessageBox.Show($"Unable to set position for {process.MainWindowTitle}");
         }
 
+        #region Item Container Methods
+
         private void ItemButtonRestoreClick(object sender, RoutedEventArgs e)
         {
             var process = ((FrameworkElement)sender).DataContext as Process;
@@ -78,18 +62,6 @@ namespace EveWindowManager
             RestoreClientPosition(process);
 
             UpdateStatus($"Client {process.MainWindowTitle} restored.");
-        }
-
-        /* Save client positions */
-
-        private void SaveAllButtonClick(object sender, RoutedEventArgs e)
-        {
-            foreach (Process process in icEveClients.Items)
-            {
-                _clientSettingsStore.Upsert(process.ToEveClientSetting());
-            }
-            _clientSettingsStore.SaveToFile();
-            UpdateStatus("All clients saved.");
         }
 
         private void ItemButtonSaveClick(object sender, RoutedEventArgs e)
@@ -100,20 +72,51 @@ namespace EveWindowManager
             UpdateStatus($"Client {process.MainWindowTitle} saved.");
         }
 
-        private void ReloadFromFileClick(object sender, RoutedEventArgs e)
+        #endregion
+
+        #region Button methods
+
+        private void Button_Refresh(object sender, RoutedEventArgs e)
+        {
+            RefreshClients();
+        }
+        
+        private void Button_RestoreAll(object sender, RoutedEventArgs e)
+        {
+            foreach (Process process in icEveClients.Items)
+            {
+                RestoreClientPosition(process);
+            }
+            UpdateStatus("All clients restored.");
+        }
+
+        private void Button_SaveAll(object sender, RoutedEventArgs e)
+        {
+            foreach (Process process in icEveClients.Items)
+            {
+                _clientSettingsStore.Upsert(process.ToEveClientSetting());
+            }
+            _clientSettingsStore.SaveToFile();
+            UpdateStatus("All clients saved.");
+        }
+
+        #endregion
+
+        #region Menu methods
+        private void Menu_ReloadFromFileClick(object sender, RoutedEventArgs e)
         {
             RefreshClients();
             _clientSettingsStore.LoadFromFile();
             UpdateStatus("Settings loaded from file.");
         }
 
-        private void SaveSettingsToFileClick(object sender, RoutedEventArgs e)
+        private void Menu_SaveSettingsToFileClick(object sender, RoutedEventArgs e)
         {
             _clientSettingsStore.SaveToFile();
             UpdateStatus("Settings saved to file.");
         }
 
-        private void ExitClick(object sender, RoutedEventArgs e)
+        private void Menu_Exit(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
@@ -123,9 +126,10 @@ namespace EveWindowManager
             Properties.Settings.Default.Save();
         }
 
-        private void AboutClick(object sender, RoutedEventArgs e)
+        private void Menu_About(object sender, RoutedEventArgs e)
         {
             new About().Show();
         }
+        #endregion
     }
 }

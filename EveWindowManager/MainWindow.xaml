@@ -16,13 +16,13 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="_Reload settings from file" Click="ReloadFromFileClick"/>
-                <MenuItem Header="_Save settings to file" Click="SaveSettingsToFileClick" />
+                <MenuItem Header="_Reload settings from file" Click="Menu_ReloadFromFileClick"/>
+                <MenuItem Header="_Save settings to file" Click="Menu_SaveSettingsToFileClick" />
                 <Separator />
-                <MenuItem Header="_Exit" Click="ExitClick" />
+                <MenuItem Header="_Exit" Click="Menu_Exit" />
             </MenuItem>
             <MenuItem Header="_Help">
-                <MenuItem Header="_About" Click="AboutClick" />
+                <MenuItem Header="_About" Click="Menu_About" />
             </MenuItem>
         </Menu>
         <Grid DockPanel.Dock="Top">
@@ -31,9 +31,9 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Click="RefreshButtonClick" Margin="0,0,2,0">Refresh</Button>
-            <Button Grid.Column="1" Click="SaveAllButtonClick" Margin="0,0,2,0">Save all</Button>
-            <Button Grid.Column="2" Click="RestoreAllButtonClick" Margin="0,0,2,0">Restore all</Button>
+            <Button Grid.Column="0" Click="Button_Refresh" Margin="0,0,2,0">Refresh</Button>
+            <Button Grid.Column="1" Click="Button_SaveAll" Margin="0,0,2,0">Save all</Button>
+            <Button Grid.Column="2" Click="Button_RestoreAll" Margin="0,0,2,0">Restore all</Button>
         </Grid>
         <Label Name="lbStatus" Content="..." DockPanel.Dock="Bottom"/>
         <ItemsControl Name="icEveClients" Margin="5,5,5,5">
