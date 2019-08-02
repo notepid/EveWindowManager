@@ -46,6 +46,7 @@ namespace EveWindowManager.Store
                 existingClientSetting.Width = clientSetting.Width;
                 existingClientSetting.PositionX = clientSetting.PositionX;
                 existingClientSetting.PositionY = clientSetting.PositionY;
+                existingClientSetting.IsMaximized = clientSetting.IsMaximized;
             }
             //Add new
             else

@@ -51,6 +51,9 @@ namespace EveWindowManager
 
             if (!WindowHelper.SetWindowPos(process.MainWindowHandle, IntPtr.Zero, settings.PositionX, settings.PositionY, settings.Width, settings.Height))
                 MessageBox.Show($"Unable to set position for {process.MainWindowTitle}");
+
+            if (settings.IsMaximized)
+                WindowHelper.ShowWindow(process.MainWindowHandle, (int)WindowHelper.CmdShow.SW_MAXIMIZE);
         }
 
         #region Item Container Methods
