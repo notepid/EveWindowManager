@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using EveWindowManager.Extensions;
-using EveWindowManager.Models;
 using EveWindowManager.Properties;
 using EveWindowManager.Store;
+using EveWindowManager.Ui.Models;
 using EveWindowManager.Windows;
 using Microsoft.Win32;
 

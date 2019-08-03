@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace EveWindowManager.Models
+namespace EveWindowManager.Ui.Models
 {
     public class ProcessListItem
     {

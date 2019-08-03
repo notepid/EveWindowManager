@@ -81,8 +81,8 @@
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
     <Compile Include="Extensions\EveClientSettingsExtensions.cs" />
-    <Compile Include="Converters\InverseBooleanConverter.cs" />
-    <Compile Include="Models\ProcessListItem.cs" />
+    <Compile Include="Ui\Converters\InverseBooleanConverter.cs" />
+    <Compile Include="Ui\Models\ProcessListItem.cs" />
     <Compile Include="Store\EveClientSetting.cs" />
     <Compile Include="Store\EveClientSettingsStore.cs" />
     <Compile Include="Windows\WindowHelper.cs" />
@@ -146,22 +146,22 @@
     <Resource Include="browser.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\icons8-checkmark-48.png" />
+    <Resource Include="Ui\Assets\icons8-checkmark-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\appbar.save.png" />
+    <Resource Include="Ui\Assets\appbar.save.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\appbar.refresh.png" />
+    <Resource Include="Ui\Assets\appbar.refresh.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\appbar.check.png" />
+    <Resource Include="Ui\Assets\appbar.check.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\appbar.delete.png" />
+    <Resource Include="Ui\Assets\appbar.delete.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\appbar.window.restore.png" />
+    <Resource Include="Ui\Assets\appbar.window.restore.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

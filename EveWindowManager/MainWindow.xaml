@@ -3,9 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:EveWindowManager"
         xmlns:p="clr-namespace:EveWindowManager.Properties"
-        xmlns:converters="clr-namespace:EveWindowManager.Converters"
+        xmlns:converters="clr-namespace:EveWindowManager.Ui.Converters"
         mc:Ignorable="d"
         Title="ewm v0.0.4 - Eve Window Manager"
         Left="{Binding Source={x:Static p:Settings.Default}, Path=Left, Mode=TwoWay}"
@@ -45,19 +44,19 @@
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0" Click="Button_Refresh" Margin="0,0,2,0">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="Assets/appbar.refresh.png" Height="24" />
+                    <Image Source="Ui/Assets/appbar.refresh.png" Height="24" />
                     <TextBlock VerticalAlignment="Center">Refresh Clients</TextBlock>
                 </StackPanel>
             </Button>
             <Button Grid.Column="1" Click="Button_SaveAll" Margin="0,0,2,0">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="Assets/appbar.save.png" Height="24" />
+                    <Image Source="Ui/Assets/appbar.save.png" Height="24" />
                     <TextBlock VerticalAlignment="Center">Save All</TextBlock>
                 </StackPanel>
             </Button>
             <Button Grid.Column="2" Click="Button_RestoreAll" Margin="0,0,2,0">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="Assets/appbar.window.restore.png" Height="24" />
+                    <Image Source="Ui/Assets/appbar.window.restore.png" Height="24" />
                     <TextBlock VerticalAlignment="Center">Restore All</TextBlock>
                 </StackPanel>
             </Button>
@@ -75,19 +74,19 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Text="{Binding Process.MainWindowTitle}" />
 
-                        <Image Name="Image" Grid.Column="1" Source="/Assets/appbar.check.png" ToolTip="This client settings are saved." Visibility="{Binding IsSaved, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}"/>
+                        <Image Name="Image" Grid.Column="1" Source="Ui/Assets/appbar.check.png" ToolTip="This client settings are saved." Visibility="{Binding IsSaved, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}"/>
 
                         <Button Grid.Column="2" Click="ItemButtonSaveClick" ToolTip="Save the position of this client." Visibility="{Binding IsSaved, Converter={StaticResource InverseBooleanConverter}}">
                             <Button.Template>
                                 <ControlTemplate>
-                                    <Image Source="Assets/appbar.save.png"/>
+                                    <Image Source="Ui/Assets/appbar.save.png"/>
                                 </ControlTemplate>
                             </Button.Template>
                         </Button>
                         <Button Grid.Column="2" Click="ItemButtonDeleteClick" ToolTip="Delete the saved position of this client." Visibility="{Binding IsSaved, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <Button.Template>
                                 <ControlTemplate>
-                                    <Image Source="Assets/appbar.delete.png"/>
+                                    <Image Source="Ui/Assets/appbar.delete.png"/>
                                 </ControlTemplate>
                             </Button.Template>
                         </Button>
@@ -95,7 +94,7 @@
                         <Button Grid.Column="3" Click="ItemButtonRestoreClick" ToolTip="Reposition the client window to the saved position.">
                             <Button.Template>
                                 <ControlTemplate>
-                                    <Image Source="Assets/appbar.window.restore.png"/>
+                                    <Image Source="Ui/Assets/appbar.window.restore.png"/>
                                 </ControlTemplate>
                             </Button.Template>
                         </Button>

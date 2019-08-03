@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Data;
 
-namespace EveWindowManager.Converters
+namespace EveWindowManager.Ui.Converters
 {
     public class InverseBooleanConverter : IValueConverter
     {
