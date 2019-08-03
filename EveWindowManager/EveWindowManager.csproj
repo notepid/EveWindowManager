@@ -81,6 +81,7 @@
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
     <Compile Include="Extensions\EveClientSettingsExtensions.cs" />
+    <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Models\ProcessListItem.cs" />
     <Compile Include="Store\EveClientSetting.cs" />
     <Compile Include="Store\EveClientSettingsStore.cs" />
@@ -146,6 +147,21 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\icons8-checkmark-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\appbar.save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\appbar.refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\appbar.check.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\appbar.delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\appbar.window.restore.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

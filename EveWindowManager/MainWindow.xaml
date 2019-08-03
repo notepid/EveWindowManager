@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EveWindowManager"
         xmlns:p="clr-namespace:EveWindowManager.Properties"
+        xmlns:converters="clr-namespace:EveWindowManager.Converters"
         mc:Ignorable="d"
         Title="ewm v0.0.4 - Eve Window Manager"
         Left="{Binding Source={x:Static p:Settings.Default}, Path=Left, Mode=TwoWay}"
@@ -16,6 +17,7 @@
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
     </Window.Resources>
 
     <DockPanel>
@@ -34,15 +36,30 @@
                 <MenuItem Header="_About" Click="Menu_About" />
             </MenuItem>
         </Menu>
-        <Grid DockPanel.Dock="Top">
+        <Grid DockPanel.Dock="Top" Margin="5,0,5,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Click="Button_Refresh" Margin="0,0,2,0">Refresh</Button>
-            <Button Grid.Column="1" Click="Button_SaveAll" Margin="0,0,2,0">Save all</Button>
-            <Button Grid.Column="2" Click="Button_RestoreAll" Margin="0,0,2,0">Restore all</Button>
+            <Button Grid.Column="0" Click="Button_Refresh" Margin="0,0,2,0">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="Assets/appbar.refresh.png" Height="24" />
+                    <TextBlock VerticalAlignment="Center">Refresh Clients</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button Grid.Column="1" Click="Button_SaveAll" Margin="0,0,2,0">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="Assets/appbar.save.png" Height="24" />
+                    <TextBlock VerticalAlignment="Center">Save All</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button Grid.Column="2" Click="Button_RestoreAll" Margin="0,0,2,0">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="Assets/appbar.window.restore.png" Height="24" />
+                    <TextBlock VerticalAlignment="Center">Restore All</TextBlock>
+                </StackPanel>
+            </Button>
         </Grid>
         <Label Name="lbStatus" Content="..." DockPanel.Dock="Bottom"/>
         <ItemsControl Name="icEveClients" Margin="5,5,5,5">
@@ -51,15 +68,36 @@
                     <Grid Margin="0,0,0,5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="50" />
-                            <ColumnDefinition Width="50" />
-                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition Width="30" />
+                            <ColumnDefinition Width="30" />
+                            <ColumnDefinition Width="30" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Text="{Binding Process.MainWindowTitle}" />
-                        <Image Name="Image" Grid.Column="1" Source="/Assets/icons8-checkmark-48.png" Width="12" ToolTip="This client settings are saved" Visibility="{Binding IsSaved, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}"/>
-                        <Button Grid.Column="2" Click="ItemButtonSaveClick">Save</Button>
-                        <Button Grid.Column="2" Click="ItemButtonDeleteClick" Visibility="{Binding IsSaved, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Visible}">Delete</Button>
-                        <Button Grid.Column="3" Click="ItemButtonRestoreClick">Restore</Button>
+
+                        <Image Name="Image" Grid.Column="1" Source="/Assets/appbar.check.png" ToolTip="This client settings are saved." Visibility="{Binding IsSaved, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}"/>
+
+                        <Button Grid.Column="2" Click="ItemButtonSaveClick" ToolTip="Save the position of this client." Visibility="{Binding IsSaved, Converter={StaticResource InverseBooleanConverter}}">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Image Source="Assets/appbar.save.png"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                        <Button Grid.Column="2" Click="ItemButtonDeleteClick" ToolTip="Delete the saved position of this client." Visibility="{Binding IsSaved, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Image Source="Assets/appbar.delete.png"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+
+                        <Button Grid.Column="3" Click="ItemButtonRestoreClick" ToolTip="Reposition the client window to the saved position.">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Image Source="Assets/appbar.window.restore.png"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

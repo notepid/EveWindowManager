@@ -161,7 +161,7 @@ namespace EveWindowManager
 
         private void Menu_About(object sender, RoutedEventArgs e)
         {
-            new About().Show();
+            new About {Owner = this}.Show();
         }
 
         #endregion
