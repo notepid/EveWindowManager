@@ -17,12 +17,16 @@ namespace EveWindowManager
     /// </summary>
     public partial class MainWindow : Window
     {
+        private const string Version = "v0.0.5";
+        public string TitleBar { get; } = $"ewm {Version} - Eve Window Manager";
+
         private readonly EveClientSettingsStore _clientSettingsStore = new EveClientSettingsStore();
 
         public MainWindow()
         {
             _clientSettingsStore.LoadFromFile(Settings.Default.ClientSettingsFile);
             InitializeComponent();
+            DataContext = this;
             UpdateStatus($"Loaded settings from {Path.GetFileName(Settings.Default.ClientSettingsFile)}.");
         }
 
@@ -44,7 +48,7 @@ namespace EveWindowManager
 
             foreach (var process in processes)
             {
-                if (!process.MainWindowTitle.StartsWith("EVE - ")) continue;
+                if (!process.MainWindowTitle.StartsWith(Settings.Default.EveTitlebarPrefix)) continue;
 
                 var isSaved = _clientSettingsStore.IsSaved(process.MainWindowTitle); ;
                 items.Add(new ProcessListItem { Process = process, IsSaved = isSaved });

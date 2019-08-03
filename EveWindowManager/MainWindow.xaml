@@ -6,7 +6,7 @@
         xmlns:p="clr-namespace:EveWindowManager.Properties"
         xmlns:converters="clr-namespace:EveWindowManager.Ui.Converters"
         mc:Ignorable="d"
-        Title="ewm v0.0.4 - Eve Window Manager"
+        Title="{Binding TitleBar, Mode=OneTime}"
         Left="{Binding Source={x:Static p:Settings.Default}, Path=Left, Mode=TwoWay}"
         Top="{Binding Source={x:Static p:Settings.Default}, Path=Top, Mode=TwoWay}"
         Width="{Binding Source={x:Static p:Settings.Default}, Path=Width, Mode=TwoWay}"
@@ -62,7 +62,7 @@
             </Button>
         </Grid>
         <Label Name="lbStatus" Content="..." DockPanel.Dock="Bottom"/>
-        <ItemsControl Name="icEveClients" Margin="5,5,5,5">
+        <ItemsControl Name="icEveClients" Margin="5,0,5,5" Height="337" VerticalAlignment="Bottom" Width="422">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Grid Margin="0,0,0,5">

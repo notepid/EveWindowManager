@@ -118,5 +118,17 @@ namespace EveWindowManager.Properties {
                 this["ClientSettingsFile"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("EVE - ")]
+        public string EveTitlebarPrefix {
+            get {
+                return ((string)(this["EveTitlebarPrefix"]));
+            }
+            set {
+                this["EveTitlebarPrefix"] = value;
+            }
+        }
     }
 }

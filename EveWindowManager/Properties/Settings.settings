@@ -26,5 +26,8 @@
     <Setting Name="ClientSettingsFile" Type="System.String" Scope="User">
       <Value Profile="(Default)">clientSettings.json</Value>
     </Setting>
+    <Setting Name="EveTitlebarPrefix" Type="System.String" Scope="User">
+      <Value Profile="(Default)">EVE - </Value>
+    </Setting>
   </Settings>
 </SettingsFile>
