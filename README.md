@@ -1,5 +1,14 @@
-# EveWindowManager
+# Eve Window Manager
 This little program lets you organize your Eve Online game clients when multiboxing.
+
+### Save client positions
+* Start your eve clients and log in characters
+* Position them how you like them to be
+* Click "Save All"
+
+### Load
+* Start your eve clients and log in characters
+* Click "Restore All"
 
 # Download
 You can download the latest release here: https://github.com/notepid/EveWindowManager/releases/latest
