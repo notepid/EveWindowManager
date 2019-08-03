@@ -6,13 +6,13 @@
         xmlns:local="clr-namespace:EveWindowManager"
         xmlns:p="clr-namespace:EveWindowManager.Properties"
         mc:Ignorable="d"
-        Title="ewm v0.0.3 - Eve Window Manager"
+        Title="ewm v0.0.4 - Eve Window Manager"
         Left="{Binding Source={x:Static p:Settings.Default}, Path=Left, Mode=TwoWay}"
         Top="{Binding Source={x:Static p:Settings.Default}, Path=Top, Mode=TwoWay}"
         Width="{Binding Source={x:Static p:Settings.Default}, Path=Width, Mode=TwoWay}"
         Height="{Binding Source={x:Static p:Settings.Default}, Path=Height, Mode=TwoWay}"
         WindowState="{Binding Source={x:Static p:Settings.Default}, Path=WindowState, Mode=TwoWay}"
-        Closed="Window_Closed">
+        Closed="Window_Closed" Loaded="Window_Loaded" Topmost="{Binding Source={x:Static p:Settings.Default}, Path=AlwaysOnTop, Mode=TwoWay}">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -25,6 +25,10 @@
                 <MenuItem Header="_Save settings to file" Click="Menu_SaveSettingsToFileClick" />
                 <Separator />
                 <MenuItem Header="_Exit" Click="Menu_Exit" />
+            </MenuItem>
+            <MenuItem Header="_Settings">
+                <MenuItem Header="_Bring client to foreground on restore" IsCheckable="True" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=BringToForegroundOnRestore, Mode=TwoWay}"/>
+                <MenuItem Header="_Always on top" IsCheckable="True" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=AlwaysOnTop, Mode=TwoWay}"/>
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="_About" Click="Menu_About" />

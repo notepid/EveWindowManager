@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Windows;
 using EveWindowManager.Extensions;
 using EveWindowManager.Models;
+using EveWindowManager.Properties;
 using EveWindowManager.Store;
 using EveWindowManager.Windows;
 
@@ -19,6 +20,10 @@ namespace EveWindowManager
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
             RefreshClients();
         }
 
@@ -57,6 +62,9 @@ namespace EveWindowManager
 
             if (settings.IsMaximized)
                 WindowHelper.ShowWindow(process.MainWindowHandle, (int)WindowHelper.CmdShow.SW_MAXIMIZE);
+
+            if (Settings.Default.BringToForegroundOnRestore)
+                WindowHelper.SetForegroundWindow(process.MainWindowHandle);
         }
 
         #region Item Container Methods
@@ -106,6 +114,9 @@ namespace EveWindowManager
             foreach (ProcessListItem icItem in icEveClients.Items)
             {
                 RestoreClientPosition(icItem.Process);
+
+                if (Settings.Default.BringToForegroundOnRestore)
+                    WindowHelper.SetForegroundWindow(icItem.Process.MainWindowHandle);
             }
             UpdateStatus("All clients restored.");
         }
@@ -145,13 +156,14 @@ namespace EveWindowManager
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            Properties.Settings.Default.Save();
+            Settings.Default.Save();
         }
 
         private void Menu_About(object sender, RoutedEventArgs e)
         {
             new About().Show();
         }
+
         #endregion
     }
 }
