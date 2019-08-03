@@ -106,5 +106,17 @@ namespace EveWindowManager.Properties {
                 this["AlwaysOnTop"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("clientSettings.json")]
+        public string ClientSettingsFile {
+            get {
+                return ((string)(this["ClientSettingsFile"]));
+            }
+            set {
+                this["ClientSettingsFile"] = value;
+            }
+        }
     }
 }

@@ -23,8 +23,9 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="_Reload settings from file" Click="Menu_ReloadFromFileClick"/>
-                <MenuItem Header="_Save settings to file" Click="Menu_SaveSettingsToFileClick" />
+                <MenuItem Header="_Open..." Click="Menu_Load"/>
+                <MenuItem Header="_Save" Click="Menu_Save" />
+                <MenuItem Header="_Save As..." Click="Menu_SaveAs" />
                 <Separator />
                 <MenuItem Header="_Exit" Click="Menu_Exit" />
             </MenuItem>

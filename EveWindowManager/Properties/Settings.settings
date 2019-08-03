@@ -23,5 +23,8 @@
     <Setting Name="AlwaysOnTop" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="ClientSettingsFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">clientSettings.json</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

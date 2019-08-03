@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using EveWindowManager.Extensions;
 using EveWindowManager.Models;
 using EveWindowManager.Properties;
 using EveWindowManager.Store;
 using EveWindowManager.Windows;
+using Microsoft.Win32;
 
 namespace EveWindowManager
 {
@@ -19,7 +21,9 @@ namespace EveWindowManager
 
         public MainWindow()
         {
+            _clientSettingsStore.LoadFromFile(Settings.Default.ClientSettingsFile);
             InitializeComponent();
+            UpdateStatus($"Loaded settings from {Path.GetFileName(Settings.Default.ClientSettingsFile)}.");
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -47,8 +51,6 @@ namespace EveWindowManager
             }
 
             icEveClients.ItemsSource = items;
-
-            UpdateStatus("Clients refreshed.");
         }
 
         private void RestoreClientPosition(Process process)
@@ -82,8 +84,8 @@ namespace EveWindowManager
         {
             var icItem = ((FrameworkElement)sender).DataContext as ProcessListItem;
             _clientSettingsStore.Upsert(icItem.Process.ToEveClientSetting());
-            _clientSettingsStore.SaveToFile();
-            
+            _clientSettingsStore.SaveToFile(Settings.Default.ClientSettingsFile);
+
             icItem.IsSaved = _clientSettingsStore.IsSaved(icItem.Process.MainWindowTitle);
             icEveClients.Items.Refresh();
             UpdateStatus($"Client {icItem.Process.MainWindowTitle} saved.");
@@ -93,7 +95,7 @@ namespace EveWindowManager
         {
             var icItem = ((FrameworkElement)sender).DataContext as ProcessListItem;
             _clientSettingsStore.DeleteByWindowTitle(icItem.Process.MainWindowTitle);
-            _clientSettingsStore.SaveToFile();
+            _clientSettingsStore.SaveToFile(Settings.Default.ClientSettingsFile);
 
             icItem.IsSaved = _clientSettingsStore.IsSaved(icItem.Process.MainWindowTitle);
             icEveClients.Items.Refresh();
@@ -107,6 +109,7 @@ namespace EveWindowManager
         private void Button_Refresh(object sender, RoutedEventArgs e)
         {
             RefreshClients();
+            UpdateStatus("Client list refreshed.");
         }
         
         private void Button_RestoreAll(object sender, RoutedEventArgs e)
@@ -128,7 +131,7 @@ namespace EveWindowManager
                 _clientSettingsStore.Upsert(icItem.Process.ToEveClientSetting());
                 icItem.IsSaved = _clientSettingsStore.IsSaved(icItem.Process.MainWindowTitle);
             }
-            _clientSettingsStore.SaveToFile();
+            _clientSettingsStore.SaveToFile(Settings.Default.ClientSettingsFile);
             icEveClients.Items.Refresh();
             UpdateStatus("All clients saved.");
         }
@@ -136,17 +139,35 @@ namespace EveWindowManager
         #endregion
 
         #region Menu methods
-        private void Menu_ReloadFromFileClick(object sender, RoutedEventArgs e)
+        private void Menu_Load(object sender, RoutedEventArgs e)
         {
-            RefreshClients();
-            _clientSettingsStore.LoadFromFile();
-            UpdateStatus("Settings loaded from file.");
+            var openFileDialog = new OpenFileDialog {Filter = "Json Configuration File (*.json)|*.json" };
+
+            if (openFileDialog.ShowDialog() != true) return;
+
+            _clientSettingsStore.LoadFromFile(openFileDialog.FileName);
+            Settings.Default.ClientSettingsFile = openFileDialog.FileName;
+            Settings.Default.Save();
+
+            UpdateStatus($"Client settings loaded from file {Path.GetFileName(Settings.Default.ClientSettingsFile)}.");
         }
 
-        private void Menu_SaveSettingsToFileClick(object sender, RoutedEventArgs e)
+        private void Menu_Save(object sender, RoutedEventArgs e)
         {
-            _clientSettingsStore.SaveToFile();
-            UpdateStatus("Settings saved to file.");
+            _clientSettingsStore.SaveToFile(Settings.Default.ClientSettingsFile);
+            UpdateStatus($"Settings saved to {Path.GetFileName(Settings.Default.ClientSettingsFile)}.");
+        }
+
+        private void Menu_SaveAs(object sender, RoutedEventArgs e)
+        {
+            var saveFileDialog = new SaveFileDialog { Filter = "Json Configuration File (*.json)|*.json" };
+            if (saveFileDialog.ShowDialog() != true) return;
+
+            Settings.Default.ClientSettingsFile = saveFileDialog.FileName;
+            Settings.Default.Save();
+
+            _clientSettingsStore.SaveToFile(Settings.Default.ClientSettingsFile);
+            UpdateStatus($"Settings saved to {Path.GetFileName(Settings.Default.ClientSettingsFile)}.");
         }
 
         private void Menu_Exit(object sender, RoutedEventArgs e)

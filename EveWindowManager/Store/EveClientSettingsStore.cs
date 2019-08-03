@@ -7,27 +7,19 @@ namespace EveWindowManager.Store
 {
     public class EveClientSettingsStore
     {
-        private readonly string _storeFileName;
         private List<EveClientSetting> _eveClientSettings = new List<EveClientSetting>();
-        private const string DefaultStoreFileName = "clientSettings.json";
 
-        public EveClientSettingsStore(string storeFileName = DefaultStoreFileName)
+        public void LoadFromFile(string fileName)
         {
-            _storeFileName = storeFileName;
-            if(File.Exists(_storeFileName))
-                LoadFromFile();
-        }
-
-        public void LoadFromFile()
-        {
-            var json = File.ReadAllText(_storeFileName);
+            if (!File.Exists(fileName)) return;
+            var json = File.ReadAllText(fileName);
             _eveClientSettings = JsonConvert.DeserializeObject<List<EveClientSetting>>(json);
         }
 
-        public void SaveToFile()
+        public void SaveToFile(string fileName)
         {
             var json = JsonConvert.SerializeObject(_eveClientSettings, Formatting.Indented);
-            File.WriteAllText(_storeFileName, json);
+            File.WriteAllText(fileName, json);
         }
 
         public EveClientSetting GetSettingByWindowTitle(string windowTitle)
