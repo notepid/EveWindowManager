@@ -6,3 +6,5 @@ You can download the latest release here: https://github.com/notepid/EveWindowMa
 
 ## Licences
 Icons made by [Freepik](https://www.flaticon.com/authors/freepik) from [Flaticon](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
+
+[![Build status](https://notepid.visualstudio.com/EveWindowManager-DevOps/_apis/build/status/EveWindowManager)](https://notepid.visualstudio.com/EveWindowManager-DevOps/_build/latest?definitionId=6)
