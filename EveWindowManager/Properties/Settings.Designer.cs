@@ -130,5 +130,29 @@ namespace EveWindowManager.Properties {
                 this["EveTitlebarPrefix"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("500")]
+        public int AutoRefreshIntervalMs {
+            get {
+                return ((int)(this["AutoRefreshIntervalMs"]));
+            }
+            set {
+                this["AutoRefreshIntervalMs"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AutoRefreshEnabled {
+            get {
+                return ((bool)(this["AutoRefreshEnabled"]));
+            }
+            set {
+                this["AutoRefreshEnabled"] = value;
+            }
+        }
     }
 }

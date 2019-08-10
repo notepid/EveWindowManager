@@ -29,5 +29,11 @@
     <Setting Name="EveTitlebarPrefix" Type="System.String" Scope="User">
       <Value Profile="(Default)">EVE - </Value>
     </Setting>
+    <Setting Name="AutoRefreshIntervalMs" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">500</Value>
+    </Setting>
+    <Setting Name="AutoRefreshEnabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

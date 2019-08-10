@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
+using System.Timers;
 using System.Windows;
 using EveWindowManager.Extensions;
 using EveWindowManager.Properties;
@@ -9,6 +11,7 @@ using EveWindowManager.Store;
 using EveWindowManager.Ui.Models;
 using EveWindowManager.Windows;
 using Microsoft.Win32;
+using Timer = System.Timers.Timer;
 
 namespace EveWindowManager
 {
@@ -21,6 +24,7 @@ namespace EveWindowManager
         public string TitleBar { get; } = $"ewm {Version} - Eve Window Manager";
 
         private readonly EveClientSettingsStore _clientSettingsStore = new EveClientSettingsStore();
+        public readonly Timer RefreshTimer = new Timer();
 
         public MainWindow()
         {
@@ -32,7 +36,16 @@ namespace EveWindowManager
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            RefreshClients();
+            RefreshTimer.Interval = Settings.Default.AutoRefreshIntervalMs;
+            RefreshTimer.Elapsed += RefreshTimerOnElapsed;
+            RefreshTimer.AutoReset = true;
+            RefreshTimer.Enabled = Settings.Default.AutoRefreshEnabled;
+        }
+
+        private void RefreshTimerOnElapsed(object sender, ElapsedEventArgs e)
+        {
+            Dispatcher.BeginInvoke(new ThreadStart(RefreshClients));
+            Debug.WriteLine($"RefreshTimerOnElapsed {DateTime.Now.Millisecond}");
         }
 
         private void UpdateStatus(string message)
@@ -187,6 +200,11 @@ namespace EveWindowManager
         private void Menu_About(object sender, RoutedEventArgs e)
         {
             new About {Owner = this}.Show();
+        }
+
+        private void MenuItem_AutoRefreshEnabled(object sender, RoutedEventArgs e)
+        {
+            RefreshTimer.Enabled = Settings.Default.AutoRefreshEnabled;
         }
 
         #endregion
