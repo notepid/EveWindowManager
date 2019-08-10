@@ -154,5 +154,17 @@ namespace EveWindowManager.Properties {
                 this["AutoRefreshEnabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoRestoreClients {
+            get {
+                return ((bool)(this["AutoRestoreClients"]));
+            }
+            set {
+                this["AutoRestoreClients"] = value;
+            }
+        }
     }
 }

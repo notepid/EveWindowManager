@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Timers;
 using System.Windows;
@@ -20,11 +21,13 @@ namespace EveWindowManager
     /// </summary>
     public partial class MainWindow : Window
     {
-        private const string Version = "v0.0.5";
+        private const string Version = "v0.0.6-test";
         public string TitleBar { get; } = $"ewm {Version} - Eve Window Manager";
 
         private readonly EveClientSettingsStore _clientSettingsStore = new EveClientSettingsStore();
-        public readonly Timer RefreshTimer = new Timer();
+        public readonly Timer CheckTimer = new Timer();
+
+        private readonly List<ProcessListItem> _icEveClientsList = new List<ProcessListItem>();
 
         public MainWindow()
         {
@@ -36,16 +39,20 @@ namespace EveWindowManager
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            RefreshTimer.Interval = Settings.Default.AutoRefreshIntervalMs;
-            RefreshTimer.Elapsed += RefreshTimerOnElapsed;
-            RefreshTimer.AutoReset = true;
-            RefreshTimer.Enabled = Settings.Default.AutoRefreshEnabled;
+            CheckTimer.Interval = Settings.Default.AutoRefreshIntervalMs;
+            CheckTimer.Elapsed += CheckTimerOnElapsed;
+            CheckTimer.AutoReset = true;
+            CheckTimer.Enabled = true;
+            icEveClients.ItemsSource = _icEveClientsList;
         }
 
-        private void RefreshTimerOnElapsed(object sender, ElapsedEventArgs e)
+        private void CheckTimerOnElapsed(object sender, ElapsedEventArgs e)
         {
-            Dispatcher.BeginInvoke(new ThreadStart(RefreshClients));
-            Debug.WriteLine($"RefreshTimerOnElapsed {DateTime.Now.Millisecond}");
+            if (Settings.Default.AutoRefreshEnabled)
+                Dispatcher?.BeginInvoke(new ThreadStart(RefreshClients));
+
+            if (Settings.Default.AutoRestoreClients)
+                Dispatcher?.BeginInvoke(new ThreadStart(RestoreAllClientPositionsOnce));
         }
 
         private void UpdateStatus(string message)
@@ -57,17 +64,34 @@ namespace EveWindowManager
         {
             var processes = Process.GetProcessesByName("exefile");
 
-            var items = new List<ProcessListItem>();
+            var anyUpdated = false;
 
+            //Add new
             foreach (var process in processes)
             {
+                //Skip any eve clients that are not logged in
                 if (!process.MainWindowTitle.StartsWith(Settings.Default.EveTitlebarPrefix)) continue;
 
-                var isSaved = _clientSettingsStore.IsSaved(process.MainWindowTitle); ;
-                items.Add(new ProcessListItem { Process = process, IsSaved = isSaved });
+                //Skip any clients that already has been added to the list
+                if (_icEveClientsList.Any(x => x.Process.MainWindowTitle.Equals(process.MainWindowTitle))) continue;
+
+                var isSaved = _clientSettingsStore.IsSaved(process.MainWindowTitle);
+                _icEveClientsList.Add(new ProcessListItem { Process = process, IsSaved = isSaved });
+
+                anyUpdated = true;
             }
 
-            icEveClients.ItemsSource = items;
+            //Remove those that have been closed
+            foreach (var processListItem in _icEveClientsList.ToList())
+            {
+                if (processes.Any(x => x.MainWindowTitle.Equals(processListItem.Process.MainWindowTitle))) continue;
+
+                _icEveClientsList.Remove(processListItem);
+                anyUpdated = true;
+            }
+
+            if (anyUpdated)
+                icEveClients.Items.Refresh();
         }
 
         private void RestoreClientPosition(Process process)
@@ -84,6 +108,38 @@ namespace EveWindowManager
 
             if (Settings.Default.BringToForegroundOnRestore)
                 WindowHelper.SetForegroundWindow(process.MainWindowHandle);
+        }
+
+        private void RestoreAllClientPositions()
+        {
+            foreach (var icItem in _icEveClientsList)
+            {
+                RestoreClientPosition(icItem.Process);
+
+                if (Settings.Default.BringToForegroundOnRestore)
+                    WindowHelper.SetForegroundWindow(icItem.Process.MainWindowHandle);
+            }
+        }
+
+        private void RestoreAllClientPositionsOnce()
+        {
+            var anyUpdated = false;
+            foreach (var icItem in _icEveClientsList)
+            {
+                if (icItem.HasBeenRestored) continue;
+
+                RestoreClientPosition(icItem.Process);
+
+                if (Settings.Default.BringToForegroundOnRestore)
+                    WindowHelper.SetForegroundWindow(icItem.Process.MainWindowHandle);
+
+                icItem.HasBeenRestored = true;
+                anyUpdated = true;
+                UpdateStatus($"Position of {icItem.Process.MainWindowTitle} auto restored.");
+            }
+
+            if (anyUpdated)
+                icEveClients.Items.Refresh();
         }
 
         #region Item Container Methods
@@ -128,22 +184,16 @@ namespace EveWindowManager
             RefreshClients();
             UpdateStatus("Client list refreshed.");
         }
-        
+
         private void Button_RestoreAll(object sender, RoutedEventArgs e)
         {
-            foreach (ProcessListItem icItem in icEveClients.Items)
-            {
-                RestoreClientPosition(icItem.Process);
-
-                if (Settings.Default.BringToForegroundOnRestore)
-                    WindowHelper.SetForegroundWindow(icItem.Process.MainWindowHandle);
-            }
+            RestoreAllClientPositions();
             UpdateStatus("All clients restored.");
         }
 
         private void Button_SaveAll(object sender, RoutedEventArgs e)
         {
-            foreach (ProcessListItem icItem in icEveClients.Items)
+            foreach (var icItem in _icEveClientsList)
             {
                 _clientSettingsStore.Upsert(icItem.Process.ToEveClientSetting());
                 icItem.IsSaved = _clientSettingsStore.IsSaved(icItem.Process.MainWindowTitle);
@@ -158,7 +208,7 @@ namespace EveWindowManager
         #region Menu methods
         private void Menu_Load(object sender, RoutedEventArgs e)
         {
-            var openFileDialog = new OpenFileDialog {Filter = "Json Configuration File (*.json)|*.json" };
+            var openFileDialog = new OpenFileDialog { Filter = "Json Configuration File (*.json)|*.json" };
 
             if (openFileDialog.ShowDialog() != true) return;
 
@@ -199,12 +249,7 @@ namespace EveWindowManager
 
         private void Menu_About(object sender, RoutedEventArgs e)
         {
-            new About {Owner = this}.Show();
-        }
-
-        private void MenuItem_AutoRefreshEnabled(object sender, RoutedEventArgs e)
-        {
-            RefreshTimer.Enabled = Settings.Default.AutoRefreshEnabled;
+            new About { Owner = this }.Show();
         }
 
         #endregion

@@ -6,5 +6,6 @@ namespace EveWindowManager.Ui.Models
     {
         public Process Process { get; set; }
         public bool IsSaved { get; set; }
+        public bool HasBeenRestored { get; set; }
     }
 }

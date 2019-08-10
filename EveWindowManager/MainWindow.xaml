@@ -31,7 +31,8 @@
             <MenuItem Header="_Settings">
                 <MenuItem Header="_Bring client to foreground on restore" IsCheckable="True" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=BringToForegroundOnRestore, Mode=TwoWay}"/>
                 <MenuItem Header="_Always on top" IsCheckable="True" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=AlwaysOnTop, Mode=TwoWay}"/>
-                <MenuItem Header="_Autorefresh clients" IsCheckable="True" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=AutoRefreshEnabled, Mode=TwoWay}" Click="MenuItem_AutoRefreshEnabled"/>
+                <MenuItem Header="_AutoRefresh clients" IsCheckable="True" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=AutoRefreshEnabled, Mode=TwoWay}"/>
+                <MenuItem Header="_Automatically position clients when first detected" IsCheckable="True" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=AutoRestoreClients, Mode=TwoWay}"/>
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="_About" Click="Menu_About" />
