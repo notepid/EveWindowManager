@@ -6,9 +6,13 @@ This little program lets you organize your Eve Online game clients when multibox
 * Position them how you like them to be
 * Click "Save All"
 
+Or save individually by clicking on the save icon.
+
 ### Load
 * Start your eve clients and log in characters
 * Click "Restore All"
+
+Or restore position individually by clicking on the restore icon.
 
 # Download
 You can download the latest release here: https://github.com/notepid/EveWindowManager/releases/latest
