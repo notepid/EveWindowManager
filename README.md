@@ -1,5 +1,5 @@
 # Eve Window Manager
-This little program lets you organize your Eve Online game clients when multiboxing.
+This little program lets you organize your Eve Online game clients when multiboxing. You will get best results if you create a separate profile for each client.
 
 ### Save client positions
 * Start your eve clients and log in characters
