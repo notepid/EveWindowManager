@@ -21,7 +21,7 @@ namespace EveWindowManager
     /// </summary>
     public partial class MainWindow : Window
     {
-        private const string Version = "v0.0.6";
+        private const string Version = "v0.0.8";
         public string TitleBar { get; } = $"ewm {Version} - Eve Window Manager";
 
         private readonly EveClientSettingsStore _clientSettingsStore = new EveClientSettingsStore();

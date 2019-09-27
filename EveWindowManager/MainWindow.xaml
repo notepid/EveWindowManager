@@ -29,10 +29,11 @@
                 <MenuItem Header="_Exit" Click="Menu_Exit" />
             </MenuItem>
             <MenuItem Header="_Settings">
-                <MenuItem Header="_Bring client to foreground on restore" IsCheckable="True" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=BringToForegroundOnRestore, Mode=TwoWay}"/>
-                <MenuItem Header="_Always on top" IsCheckable="True" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=AlwaysOnTop, Mode=TwoWay}"/>
                 <MenuItem Header="_AutoRefresh clients" IsCheckable="True" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=AutoRefreshEnabled, Mode=TwoWay}"/>
-                <MenuItem Header="_Automatically position clients when first detected" IsCheckable="True" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=AutoRestoreClients, Mode=TwoWay}"/>
+                <MenuItem Header="_Bring client to foreground on restore" IsCheckable="True" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=BringToForegroundOnRestore, Mode=TwoWay}"/>
+                <MenuItem Header="_Automatically position clients when they are started" IsCheckable="True" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=AutoRestoreClients, Mode=TwoWay}"/>
+                <Separator />
+                <MenuItem Header="_Always on top" IsCheckable="True" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=AlwaysOnTop, Mode=TwoWay}"/>
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="_About" Click="Menu_About" />
@@ -64,45 +65,47 @@
             </Button>
         </Grid>
         <Label Name="lbStatus" Content="..." DockPanel.Dock="Bottom"/>
-        <ItemsControl Name="icEveClients" Margin="5,0,5,5">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Grid Margin="0,0,0,5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="30" />
-                            <ColumnDefinition Width="30" />
-                            <ColumnDefinition Width="30" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="{Binding Process.MainWindowTitle}" />
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <ItemsControl Name="icEveClients" Margin="5,0,5,5">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0,0,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="30" />
+                                <ColumnDefinition Width="30" />
+                                <ColumnDefinition Width="30" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="{Binding Process.MainWindowTitle}" />
 
-                        <Image Name="Image" Grid.Column="1" Source="Ui/Assets/appbar.check.png" ToolTip="This client settings are saved." Visibility="{Binding IsSaved, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}"/>
+                            <Image Name="Image" Grid.Column="1" Source="Ui/Assets/appbar.check.png" ToolTip="This client settings are saved." Visibility="{Binding IsSaved, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}"/>
 
-                        <Button Grid.Column="2" Click="ItemButtonSaveClick" ToolTip="Save the position of this client." Visibility="{Binding IsSaved, Converter={StaticResource InverseBooleanConverter}}">
-                            <Button.Template>
-                                <ControlTemplate>
-                                    <Image Source="Ui/Assets/appbar.save.png"/>
-                                </ControlTemplate>
-                            </Button.Template>
-                        </Button>
-                        <Button Grid.Column="2" Click="ItemButtonDeleteClick" ToolTip="Delete the saved position of this client." Visibility="{Binding IsSaved, Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <Button.Template>
-                                <ControlTemplate>
-                                    <Image Source="Ui/Assets/appbar.delete.png"/>
-                                </ControlTemplate>
-                            </Button.Template>
-                        </Button>
+                            <Button Grid.Column="2" Click="ItemButtonSaveClick" ToolTip="Save the position of this client." Visibility="{Binding IsSaved, Converter={StaticResource InverseBooleanConverter}}">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Source="Ui/Assets/appbar.save.png"/>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                            <Button Grid.Column="2" Click="ItemButtonDeleteClick" ToolTip="Delete the saved position of this client." Visibility="{Binding IsSaved, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Source="Ui/Assets/appbar.delete.png"/>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
 
-                        <Button Grid.Column="3" Click="ItemButtonRestoreClick" ToolTip="Reposition the client window to the saved position.">
-                            <Button.Template>
-                                <ControlTemplate>
-                                    <Image Source="Ui/Assets/appbar.window.restore.png"/>
-                                </ControlTemplate>
-                            </Button.Template>
-                        </Button>
-                    </Grid>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+                            <Button Grid.Column="3" Click="ItemButtonRestoreClick" ToolTip="Reposition the client window to the saved position.">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Source="Ui/Assets/appbar.window.restore.png"/>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
     </DockPanel>
 </Window>
