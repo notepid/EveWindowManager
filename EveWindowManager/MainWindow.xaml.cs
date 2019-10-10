@@ -21,7 +21,7 @@ namespace EveWindowManager
     /// </summary>
     public partial class MainWindow : Window
     {
-        private const string Version = "v0.0.8";
+        private const string Version = "v0.0.9";
         public string TitleBar { get; } = $"ewm {Version} - Eve Window Manager";
 
         private readonly EveClientSettingsStore _clientSettingsStore = new EveClientSettingsStore();
@@ -112,8 +112,11 @@ namespace EveWindowManager
 
         private void RestoreAllClientPositions()
         {
-            foreach (var icItem in _icEveClientsList)
+            foreach (var clientSetting in _clientSettingsStore.All())
             {
+                var icItem = _icEveClientsList.FirstOrDefault(x => x.Process.MainWindowTitle.Equals(clientSetting.ProcessTitle));
+                if (icItem == null) continue;
+
                 RestoreClientPosition(icItem.Process);
 
                 if (Settings.Default.BringToForegroundOnRestore)
@@ -124,8 +127,12 @@ namespace EveWindowManager
         private void RestoreAllClientPositionsOnce()
         {
             var anyUpdated = false;
-            foreach (var icItem in _icEveClientsList)
+
+            foreach (var clientSetting in _clientSettingsStore.All())
             {
+                var icItem = _icEveClientsList.FirstOrDefault(x => x.Process.MainWindowTitle.Equals(clientSetting.ProcessTitle));
+                if (icItem == null) continue;
+
                 if (icItem.HasBeenRestored) continue;
 
                 RestoreClientPosition(icItem.Process);

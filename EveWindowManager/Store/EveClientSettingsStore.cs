@@ -9,6 +9,11 @@ namespace EveWindowManager.Store
     {
         private List<EveClientSetting> _eveClientSettings = new List<EveClientSetting>();
 
+        public List<EveClientSetting> All()
+        {
+            return _eveClientSettings;
+        }
+
         public void LoadFromFile(string fileName)
         {
             if (!File.Exists(fileName)) return;
