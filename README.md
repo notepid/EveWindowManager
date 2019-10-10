@@ -22,6 +22,9 @@ You can download the latest release here: https://github.com/notepid/EveWindowMa
 
 If you like to live on the edge and get the latest build that is still being tested, you can download it here: https://github.com/notepid/EveWindowManager/releases/tag/test-build
 
+## Upgrading
+Unpack the zip-file into the existing folder, overwriting all files except for EveWindowManager.exe.config .
+
 ## Licences
 Icons made by [Freepik](https://www.flaticon.com/authors/freepik) from [Flaticon](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
 
