@@ -166,5 +166,17 @@ namespace EveWindowManager.Properties {
                 this["AutoRestoreClients"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UnMinimizeOnRestore {
+            get {
+                return ((bool)(this["UnMinimizeOnRestore"]));
+            }
+            set {
+                this["UnMinimizeOnRestore"] = value;
+            }
+        }
     }
 }

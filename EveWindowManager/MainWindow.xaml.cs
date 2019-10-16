@@ -6,13 +6,17 @@ using System.Linq;
 using System.Threading;
 using System.Timers;
 using System.Windows;
+using System.Windows.Input;
 using EveWindowManager.Extensions;
 using EveWindowManager.Properties;
 using EveWindowManager.Store;
 using EveWindowManager.Ui.Models;
 using EveWindowManager.Windows;
 using Microsoft.Win32;
+using NHotkey;
+using NHotkey.Wpf;
 using Timer = System.Timers.Timer;
+
 
 namespace EveWindowManager
 {
@@ -21,7 +25,7 @@ namespace EveWindowManager
     /// </summary>
     public partial class MainWindow : Window
     {
-        private const string Version = "v0.0.9";
+        private const string Version = "v0.0.10-beta1";
         public string TitleBar { get; } = $"ewm {Version} - Eve Window Manager";
 
         private readonly EveClientSettingsStore _clientSettingsStore = new EveClientSettingsStore();
@@ -44,6 +48,8 @@ namespace EveWindowManager
             CheckTimer.AutoReset = true;
             CheckTimer.Enabled = true;
             icEveClients.ItemsSource = _icEveClientsList;
+
+            HotkeyManager.Current.AddOrReplace("RestoreAll", Key.End, ModifierKeys.Control | ModifierKeys.Alt, OnRestoreHotkey);
         }
 
         private void CheckTimerOnElapsed(object sender, ElapsedEventArgs e)
@@ -108,6 +114,14 @@ namespace EveWindowManager
 
             if (Settings.Default.BringToForegroundOnRestore)
                 WindowHelper.SetForegroundWindow(process.MainWindowHandle);
+
+            if (Settings.Default.UnMinimizeOnRestore)
+                WindowHelper.ShowWindow(process.MainWindowHandle, (int)WindowHelper.CmdShow.SW_SHOWNORMAL);
+        }
+
+        private void OnRestoreHotkey(object sender, HotkeyEventArgs e)
+        {
+            RestoreAllClientPositions();
         }
 
         private void RestoreAllClientPositions()
@@ -118,9 +132,6 @@ namespace EveWindowManager
                 if (icItem == null) continue;
 
                 RestoreClientPosition(icItem.Process);
-
-                if (Settings.Default.BringToForegroundOnRestore)
-                    WindowHelper.SetForegroundWindow(icItem.Process.MainWindowHandle);
             }
         }
 
@@ -136,9 +147,6 @@ namespace EveWindowManager
                 if (icItem.HasBeenRestored) continue;
 
                 RestoreClientPosition(icItem.Process);
-
-                if (Settings.Default.BringToForegroundOnRestore)
-                    WindowHelper.SetForegroundWindow(icItem.Process.MainWindowHandle);
 
                 icItem.HasBeenRestored = true;
                 anyUpdated = true;
@@ -196,6 +204,18 @@ namespace EveWindowManager
         {
             RestoreAllClientPositions();
             UpdateStatus("All clients restored.");
+        }
+
+        private void Button_MinimizeAll(object sender, RoutedEventArgs e)
+        {
+            foreach (var clientSetting in _clientSettingsStore.All())
+            {
+                var icItem = _icEveClientsList.FirstOrDefault(x => x.Process.MainWindowTitle.Equals(clientSetting.ProcessTitle));
+                if (icItem == null) continue;
+
+                WindowHelper.ShowWindow(icItem.Process.MainWindowHandle, (int)WindowHelper.CmdShow.SW_MINIMIZE);
+            }
+            UpdateStatus("All clients minimizer.");
         }
 
         private void Button_SaveAll(object sender, RoutedEventArgs e)

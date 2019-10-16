@@ -9,7 +9,7 @@
         Title="{Binding TitleBar, Mode=OneTime}"
         Left="{Binding Source={x:Static p:Settings.Default}, Path=Left, Mode=TwoWay}"
         Top="{Binding Source={x:Static p:Settings.Default}, Path=Top, Mode=TwoWay}"
-        Width="375"
+        Width="469"
         Height="403"
         WindowState="{Binding Source={x:Static p:Settings.Default}, Path=WindowState, Mode=TwoWay}"
         Closed="Window_Closed" Loaded="Window_Loaded" Topmost="{Binding Source={x:Static p:Settings.Default}, Path=AlwaysOnTop, Mode=TwoWay}" HorizontalAlignment="Left">
@@ -32,6 +32,7 @@
                 <MenuItem Header="_AutoRefresh clients" IsCheckable="True" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=AutoRefreshEnabled, Mode=TwoWay}"/>
                 <MenuItem Header="_Bring client to foreground on restore" IsCheckable="True" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=BringToForegroundOnRestore, Mode=TwoWay}"/>
                 <MenuItem Header="_Automatically position clients when they are started" IsCheckable="True" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=AutoRestoreClients, Mode=TwoWay}"/>
+                <MenuItem Header="_Unminimize clients if they are minimized" IsCheckable="True" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=UnMinimizeOnRestore, Mode=TwoWay}"/>
                 <Separator />
                 <MenuItem Header="_Always on top" IsCheckable="True" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=AlwaysOnTop, Mode=TwoWay}"/>
             </MenuItem>
@@ -41,6 +42,7 @@
         </Menu>
         <Grid DockPanel.Dock="Top" Margin="5,0,5,0">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -57,12 +59,19 @@
                     <TextBlock VerticalAlignment="Center">Save All</TextBlock>
                 </StackPanel>
             </Button>
-            <Button Grid.Column="2" Click="Button_RestoreAll" Margin="0,0,2,0">
+            <Button Grid.Column="2" Click="Button_MinimizeAll" Margin="0,0,2,0">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="Ui/Assets/appbar.window.minimize.png" Height="24" />
+                    <TextBlock VerticalAlignment="Center">Minimize All</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button Grid.Column="3" Click="Button_RestoreAll" Margin="0,0,2,0">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="Ui/Assets/appbar.window.restore.png" Height="24" />
                     <TextBlock VerticalAlignment="Center">Restore All</TextBlock>
                 </StackPanel>
             </Button>
+            
         </Grid>
         <Label Name="lbStatus" Content="..." DockPanel.Dock="Bottom"/>
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
